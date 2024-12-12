@@ -7,7 +7,11 @@ apply plugin: 'io.spring.dependency-management'
 
 group = 'ns.maintainusers'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
 
 repositories {
 	mavenCentral()
@@ -33,4 +37,17 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+test {
+    testLogging {
+        events "passed", "skipped", "failed"
+        showStandardStreams = true // Optionally show standard output/error
+        exceptionFormat "full" // Optionally show full stack traces on failures
+
+        // Customize logging for each test case
+        afterTest { descriptor, result ->
+            println "Test ${descriptor.className}.${descriptor.name} ${result.resultType}"
+        }
+    }
 }
