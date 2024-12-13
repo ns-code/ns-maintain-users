@@ -27,29 +27,30 @@ public class UserService {
         return this.userRepository.findAll();
     }
 
-    public User getUser(Long id) throws NoUserFoundException {
-        Optional<User> userOpt = this.userRepository.findById(id);
+    public User getUser(Long userId) throws NoUserFoundException {
+        Optional<User> userOpt = this.userRepository.findById(userId);
         if (userOpt.isPresent()) {
             return userOpt.get();
         }
-        throw new NoUserFoundException(id);
+        throw new NoUserFoundException(userId);
     }    
 
     public User createUser(User newUser) throws UserNameExistsException {
-        Optional<User> userOpt = this.userRepository.findByName(newUser.getName());
+        Optional<User> userOpt = this.userRepository.findByUserName(newUser.getUserName());
         if (userOpt.isPresent()) {
-            throw new UserNameExistsException(newUser.getName());
+            log.info(">> userOpt: {}", userOpt.get());
+            throw new UserNameExistsException(newUser.getUserName());
         }
         return this.userRepository.save(newUser);
     }    
     
-    public void deleteUser(Long id) throws NoUserFoundException {
-        this.getUser(id);
-        this.userRepository.deleteById(id);
+    public void deleteUser(Long userId) throws NoUserFoundException {
+        this.getUser(userId);
+        this.userRepository.deleteById(userId);
     }
 
-    public void updateUser(Long id, User updatedUser) {
-        updatedUser.setId(id);
+    public void updateUser(Long userId, User updatedUser) {
+        updatedUser.setUserId(userId);
         this.userRepository.save(updatedUser);
     }     
 }

@@ -44,15 +44,15 @@ public class UserController {
 		return this.userService.createUser(newUser);
 	}	
 
-	@PutMapping(value="/users/{id}")
+	@PutMapping(value="/users/{userId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void updateUser(@PathVariable Long id, @RequestBody User updatedUser) throws NoUserFoundException {
-		this.userService.updateUser(id, updatedUser);
+	public void updateUser(@PathVariable Long userId, @RequestBody User updatedUser) throws NoUserFoundException {
+		this.userService.updateUser(userId, updatedUser);
 	}	
 
-	@DeleteMapping(value="/users/{id}")
+	@DeleteMapping(value="/users/{userId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteUser(@PathVariable Long id) throws NoUserFoundException {
-		this.userService.deleteUser(id);
+	public void deleteUser(@PathVariable Long userId) throws NoUserFoundException {
+		this.userService.deleteUser(userId);
 	}
 }

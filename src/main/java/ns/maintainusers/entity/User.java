@@ -7,32 +7,36 @@ import java.util.stream.*;
 import com.fasterxml.jackson.annotation.*;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * https://thorben-janssen.com/ultimate-guide-association-mappings-jpa-hibernate/
  */
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "NSUSER")
 public class User {
 	// Lombok generates getters, setters, toString, equals and hashcode
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
-	private String name;
-
-	public User() {}
-
-	public User(Long id, String name) {
-		this.id = id;
-		this.name = name;
-	}
-
-	// @Override
-	// public String toString() {
-	// 	return "Student [id=" + id + ", name=" + name + "]";
-	// }
+	@NotNull
+	private Long userId;
+	@NotNull
+	private String userName;
+	@NotNull
+	private String firstName;
+	@NotNull
+	private String lastName;
+	@NotNull
+	private String email;
+	@NotNull
+	private char userStatus;
+	private String department;
 
 }

@@ -9,5 +9,5 @@ import ns.maintainusers.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>{
-    Optional<User> findByName(String name);
+    Optional<User> findByUserName(String name);
 }

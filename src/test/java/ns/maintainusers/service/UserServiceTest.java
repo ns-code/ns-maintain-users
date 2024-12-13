@@ -19,11 +19,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import lombok.extern.slf4j.Slf4j;
 import ns.maintainusers.controller.error.NoUserFoundException;
 import ns.maintainusers.controller.error.UserNameExistsException;
 import ns.maintainusers.entity.User;
 import ns.maintainusers.repository.UserRepository;
 
+@Slf4j
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UserServiceTest {
@@ -36,10 +38,10 @@ public class UserServiceTest {
     @Test
     @Order(1)
     void shouldCreateUser() throws Exception {
-        User toAddUser = new User(null, "u321");
-        User expectedUser = new User(1L, "u321");
+        User toAddUser = new User(null, "u321", "fname4", "lname4", "email4@test.com", 'I', null);
+        User expectedUser = new User(1L, "u321", "fname4", "lname4", "email4@test.com", 'I', null);
      
-        Mockito.when(userRepository.findByName(toAddUser.getName())).thenReturn(Optional.empty());
+        Mockito.when(userRepository.findByUserName(toAddUser.getUserName())).thenReturn(Optional.empty());
         Mockito.when(userRepository.save(toAddUser)).thenReturn(expectedUser);
 
         User actualUser = userService.createUser(toAddUser);
@@ -50,10 +52,10 @@ public class UserServiceTest {
     @Test
     @Order(3)
     void shouldThrowUserNameExistsException() throws Exception {
-        User toAddUser = new User(null, "u321");
-        User expectedUser = new User(1L, "u321");
+        User toAddUser = new User(null, "u321", "fname4", "lname4", "email4@test.com", 'I', null);
+        User expectedUser = new User(1L, "u321", "fname4", "lname4", "email4@test.com", 'I', null);
         
-        Mockito.when(userRepository.findByName(toAddUser.getName())).thenReturn(Optional.of(expectedUser));
+        Mockito.when(userRepository.findByUserName(toAddUser.getUserName())).thenReturn(Optional.of(expectedUser));
 
         Assertions.assertThrows(UserNameExistsException.class, () -> userService.createUser(toAddUser));
     }    
@@ -62,7 +64,7 @@ public class UserServiceTest {
     @Order(4)
     void shouldUpdateUser() throws Exception {
         userService = mock(UserService.class);
-        User toUpdateUser = new User(1L, "u321");
+        User toUpdateUser = new User(1L, "u321", "fname4", "lname4", "email4@test.com", 'I', null);
         Mockito.when(userRepository.save(toUpdateUser)).thenReturn(toUpdateUser);
         userService.updateUser(1L, toUpdateUser);
         verify(userService, times(1)).updateUser(1L, toUpdateUser);
@@ -72,7 +74,7 @@ public class UserServiceTest {
     @Order(5)
     void shouldDeleteUser() throws Exception {
         userService = mock(UserService.class);
-        User expectedUser = new User(1L, "u321");
+        User expectedUser = new User(1L, "u321", "fname4", "lname4", "email4@test.com", 'I', null);
         Mockito.when(userRepository.findById(anyLong())).thenReturn(Optional.of(expectedUser));
         userService.deleteUser(1L);
         verify(userService, times(1)).deleteUser(1L);
@@ -90,7 +92,7 @@ public class UserServiceTest {
     @Order(2)
     void shouldReturnAllUsers() {
 
-        User user = new User(1L, "u321");
+        User user = new User(1L, "u321", "fname4", "lname4", "email4@test.com", 'I', null);
 
         List<User> users = new ArrayList<>();
         users.add(user);

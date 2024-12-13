@@ -4,10 +4,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.aspectj.lang.annotation.Before;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -42,7 +45,7 @@ public class UserControllerTest {
     @Test
     @Order(1)
     void shouldCreateNewUser() throws Exception {
-        User newUser = new User(null, "u432"); 
+        User newUser = new User(null, "u432", "fname4", "lname4", "email4@test.com", 'I', null); 
         System.out.println(">>?? toCreate : "+objectMapper.writeValueAsString(newUser));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/users")
@@ -54,7 +57,7 @@ public class UserControllerTest {
     @Test
     @Order(2)
     void shouldReturnConflict() throws Exception {
-        User newUser = new User(null, "u432"); 
+        User newUser = new User(null, "u432", "fname4", "lname4", "email4@test.com", 'I', null); 
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/users")
         .contentType(MediaType.APPLICATION_JSON)
@@ -65,7 +68,7 @@ public class UserControllerTest {
     @Test
     @Order(4)
     void shouldUpdateUser() throws Exception {
-        User newUser = new User(null, "u432");
+        User newUser = new User(null, "u432", "fname4", "lname4", "email4@test.com", 'A', null);
                 
         mockMvc.perform(MockMvcRequestBuilders.put("/users/1")
         .contentType(MediaType.APPLICATION_JSON)
