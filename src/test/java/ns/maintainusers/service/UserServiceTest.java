@@ -10,14 +10,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 
 import lombok.extern.slf4j.Slf4j;
 import ns.maintainusers.controller.error.NoUserFoundException;
@@ -26,8 +24,8 @@ import ns.maintainusers.entity.User;
 import ns.maintainusers.repository.UserRepository;
 
 @Slf4j
-@SpringBootTest
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@DataJpaTest
+@Import(UserService.class)
 public class UserServiceTest {
     @Mock
     private UserRepository userRepository;
@@ -36,7 +34,6 @@ public class UserServiceTest {
     private UserService userService;
 
     @Test
-    @Order(1)
     void shouldCreateUser() throws Exception {
         User toAddUser = new User(null, "u321", "fname4", "lname4", "email4@test.com", 'I', null);
         User expectedUser = new User(1L, "u321", "fname4", "lname4", "email4@test.com", 'I', null);
@@ -50,7 +47,6 @@ public class UserServiceTest {
     }
 
     @Test
-    @Order(3)
     void shouldThrowUserNameExistsException() throws Exception {
         User toAddUser = new User(null, "u321", "fname4", "lname4", "email4@test.com", 'I', null);
         User expectedUser = new User(1L, "u321", "fname4", "lname4", "email4@test.com", 'I', null);
@@ -61,7 +57,6 @@ public class UserServiceTest {
     }    
 
     @Test
-    @Order(4)
     void shouldUpdateUser() throws Exception {
         userService = mock(UserService.class);
         User toUpdateUser = new User(1L, "u321", "fname4", "lname4", "email4@test.com", 'I', null);
@@ -71,7 +66,6 @@ public class UserServiceTest {
     }    
 
     @Test
-    @Order(5)
     void shouldDeleteUser() throws Exception {
         userService = mock(UserService.class);
         User expectedUser = new User(1L, "u321", "fname4", "lname4", "email4@test.com", 'I', null);
@@ -81,7 +75,6 @@ public class UserServiceTest {
     }  
 
     @Test
-    @Order(6)
     void shouldThrowNoUserFoundException() throws Exception {
         Mockito.when(userRepository.findById(1L)).thenReturn(Optional.empty());
 
@@ -89,7 +82,6 @@ public class UserServiceTest {
     }  
 
     @Test
-    @Order(2)
     void shouldReturnAllUsers() {
 
         User user = new User(1L, "u321", "fname4", "lname4", "email4@test.com", 'I', null);
@@ -100,7 +92,6 @@ public class UserServiceTest {
         Mockito.when(userRepository.findAll()).thenReturn(users);
 
         List<User> allUsers = userService.getAllUsers();
-        // System.out.println(">> allUsers: {}" + allUsers);
         User[] allUsersArray = allUsers.toArray(new User[0]);
 
         Assertions.assertArrayEquals(extectedUsers, allUsersArray);

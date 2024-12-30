@@ -2,18 +2,18 @@ package ns.maintainusers.service;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import lombok.extern.slf4j.Slf4j;
 import ns.maintainusers.controller.error.UserNameExistsException;
 import ns.maintainusers.entity.User;
 
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
+
 @Slf4j
-@ExtendWith(SpringExtension.class)
-@SpringBootTest
+@DataJpaTest
+@Import(UserService.class)
 public class UserServiceIntegrationTest {
     @Autowired
     private UserService userService;
@@ -31,8 +31,9 @@ public class UserServiceIntegrationTest {
     @Test
     void shouldThowUserNameEsists() throws Exception {
         User toAddUser = new User(null, "u321", "fname4", "lname4", "email4@test.com", 'I', null);
-     
-        Assertions.assertThrows(UserNameExistsException.class, () -> userService.createUser(toAddUser));
+        User toAddSecondUser = new User(null, "u321", "fname5", "lname5", "email5@test.com", 'I', null);
+        userService.createUser(toAddUser);     
+        Assertions.assertThrows(UserNameExistsException.class, () -> userService.createUser(toAddSecondUser));
     }
 
 }
