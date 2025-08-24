@@ -65,8 +65,8 @@ public class UserController {
 	}
 
     @ExceptionHandler(UserNameExistsException.class)
-    public ResponseEntity<String> handleUserNameExistsException(UserNameExistsException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    public ResponseEntity<ErrorMsg> handleUserNameExistsException(UserNameExistsException ex) {
+        return new ResponseEntity<>(new ErrorMsg(ex.getMessage()), HttpStatus.CONFLICT);
     }
 	
     @ExceptionHandler(NoUserFoundException.class)
